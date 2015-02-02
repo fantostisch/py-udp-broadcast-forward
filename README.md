@@ -9,6 +9,17 @@ So this script sniffs the traffic on the server and reacts on specific ports to 
 
 All other fields remain unaltered.
 
+#Test with scapy
+
+If 10.0.2.255 is the intended broadcast IP address then use for example scapy to send a crafted packet to see if it triggers the forwarder script:
+
+    root@fbsd:~ # scapy
+    >>> sr1(IP(dst="10.0.2.255")/UDP(dport=53),timeout=1)
+    Begin emission:
+    Finished to send 1 packets.
+    ..
+    >>>
+
 ##Pre-requisites
 
     pkg install scapy
