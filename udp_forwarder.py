@@ -7,15 +7,17 @@ from scapy.all import *
 PORTS = [ 8888 ]                # list of ports
 OLDDEST = "10.0.2.255"          # the original broadcast address
 NEWDEST = "127.0.0.10"          # the new destination of the packet
+SHOWPACKS = True                # does showpacket acutally show the packets?
 
 
 def showpacket(pkt, message=None):
     """shows packet via scapy's show() function"""
-    if message:
-        print 15 * "-",
-        print message,
-        print print 15 * "-"
-    pkt.show()
+    if SHOWPACKS:
+        if message:
+            print 15 * "-",
+            print message,
+            print print 15 * "-"
+        pkt.show()
 
 
 def exchange_destination(pkt):
@@ -23,7 +25,6 @@ def exchange_destination(pkt):
     leave all other fields untouched
     """
     pkt[IP].dst = NEWDEST
-    showpacket(pkt, "modified") # shows the modified packet
 
 
 def resend_packet(pkt):
@@ -36,6 +37,7 @@ def udp_forward(pkt):
     if UDP in pkt and pkt[IP].dst==OLDDEST and pkt[UDP].dport in PORTS:
         showpacket(pkt, "original")
         exchange_destination(pkt)
+        showpacket(pkt, "modified")
         resend_packet(pkt)
 
 
