@@ -34,7 +34,7 @@ def resend_packet(pkt):
 
 def udp_forward(pkt):
     """if packet matches, modify it and re-send to new location"""
-    if UDP in pkt and pkt[IP].dst==OLDDEST and pkt[UDP].dport in PORTS:
+    if pkt[UDP].dport in PORTS:
         showpacket(pkt, "original")
         exchange_destination(pkt)
         showpacket(pkt, "modified")
@@ -42,5 +42,5 @@ def udp_forward(pkt):
 
 
 # main loop here
-sniff(prn=udp_forward, filter="udp", store=0)
+sniff(prn=udp_forward, filter="udp and host "+OLDDEST, store=0)
 
