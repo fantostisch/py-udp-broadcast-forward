@@ -14,7 +14,7 @@ def exchange_destination(pkt):
     leave all other fields untouched
     """
     pkt[IP].dst = NEWDEST
-    pkt.show()
+    pkt.show()                  # shows the modified packet
 
 
 def resend_packet(pkt):
@@ -23,12 +23,9 @@ def resend_packet(pkt):
 
 
 def udp_forward(pkt):
+    """if packet matches, modify it and re-send to new location"""
     if UDP in pkt and pkt[IP].dst==OLDDEST and pkt[UDP].dport in PORTS:
-    #if UDP in pkt and pkt[UDP].dport in PORTS:
-        #pkt.show()
-        #print "%s" % pkt.sprintf("1.) %IP.src% -> %IP.dst%:%UDP.dport%")
-        #print "%s" % pkt.sprintf("2.) %src% -> %dst%")
-        #print "%s" % pkt.sprintf("3.) %dport%")
+        #pkt.show()              # shows the original/unaltered packet
         exchange_destination(pkt)
         resend_packet(pkt)
 
