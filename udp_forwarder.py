@@ -9,6 +9,8 @@ OLDDEST = "10.0.2.255"          # the original broadcast address
 NEWDEST = [ "127.0.0.10" ]      # list of new destinations of the packet
 SHOWPACKS = True                # does showpacket acutally show the packets?
 IFACE = "em0"                   # interface to bind to
+GWETHER = "00:0d:b9:32:31:dc"   # MAC address of your default gateway
+MYETHER = "bc:5f:f4:1a:74:cb"   # my sending NIC (facing gateway)
 
 
 def showpacket(pkt, message=None):
@@ -31,13 +33,15 @@ def exchange_destination(pkt, newdest):
     newdest:    string of single new IP address
     """
     pkt[IP].dst = newdest
+    pkt[Ether].src = MYETHER
+    pkt[Ether].dst = GWETHER
 
 
 def resend_packet(pkt):
     """send/relay the modified packet to its new destination
     pkt:        scapy network packet
     """
-    sr1(pkt, timeout=1)
+    send(pkt, timeout=1)
 
 
 def udp_forward(pkt):
