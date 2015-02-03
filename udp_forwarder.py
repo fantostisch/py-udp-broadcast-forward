@@ -12,7 +12,10 @@ IFACE = "em0"                   # interface to bind to
 
 
 def showpacket(pkt, message=None):
-    """shows packet via scapy's show() function"""
+    """shows packet via scapy's show() function
+    pkt:        scapy network packet
+    message:    additional header for the packet
+    """
     if SHOWPACKS:
         if message:
             print 15 * "-",
@@ -24,17 +27,23 @@ def showpacket(pkt, message=None):
 def exchange_destination(pkt, newdest):
     """exchange the destination of the packet
     leave all other fields untouched
+    pkt:        scapy network packet
+    newdest:    string of single new IP address
     """
     pkt[IP].dst = newdest
 
 
 def resend_packet(pkt):
-    """send/relay the modified packet to its new destination"""
+    """send/relay the modified packet to its new destination
+    pkt:        scapy network packet
+    """
     sr1(pkt, timeout=1)
 
 
 def udp_forward(pkt):
-    """if packet matches, modify it and re-send to new location"""
+    """if packet matches, modify it and re-send to new location
+    pkt:        scapy network packet
+    """
     if pkt[UDP].dport in PORTS:
         showpacket(pkt, "original")
         for newdest in NEWDEST:
