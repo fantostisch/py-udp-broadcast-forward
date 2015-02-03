@@ -1,5 +1,7 @@
-# py-udp-broadcast-forward
+#py-udp-broadcast-forward
 Small scapy script to forward UDP broadcasts to specific target IP (e.g. through a tunnel). It uses python-scapy to modify and re-send the packets.
+
+##Caution: Work-in-progress
 
 Use cases could be to forward LAN-broadcasts from old games through a VPN-tunnel to a specific host (friend's machine) so that he sees the game in his LAN browser.
 
@@ -21,5 +23,10 @@ If 10.0.2.255 is the intended broadcast IP address and 8888 is the corresponding
     >>>
 
 ##Pre-requisites
+FreeBSD:
 
     pkg install scapy
+
+Ubuntu:
+
+    sudo apt-get install python-scapy
