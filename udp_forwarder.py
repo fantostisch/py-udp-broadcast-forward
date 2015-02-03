@@ -22,7 +22,7 @@ def showpacket(pkt, message=None):
         if message:
             print 15 * "-",
             print message,
-            print print 15 * "-"
+            print 15 * "-"
         pkt.show()
 
 
