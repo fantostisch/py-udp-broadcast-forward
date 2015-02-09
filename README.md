@@ -11,12 +11,17 @@ So this script sniffs the traffic on the server and reacts on specific ports to 
 
 All other fields remain unaltered.
 
-#Test with scapy
+##Run it
+As scapy needs access rights to your network interfaces you need to be root to run the script:
+
+    sudo python udp_forwarder.py
+
+##Test with scapy
 
 If 10.0.2.255 is the intended broadcast IP address and 8888 is the corresponding UDP port then use for example scapy to send a crafted packet to see if it triggers the forwarder script:
 
     root@fbsd:~ # scapy
-    >>> sr1(IP(dst="10.0.2.255")/UDP(dport=8888),timeout=1)
+    >>> send(IP(dst="10.0.2.255")/UDP(dport=8888))
     Begin emission:
     Finished to send 1 packets.
     ..
