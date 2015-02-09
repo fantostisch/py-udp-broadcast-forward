@@ -13,7 +13,11 @@ All other fields remain unaltered.
 
 ##Run it
 As scapy needs access rights to your network interfaces you need to be root to run the script:
-
+    
+    cp settings.py.sample settings.py
+    # modify settings.py to reflect your actual environment
+    vi settings.py
+    # run the sniffer
     sudo python udp_forwarder.py
 
 ##Test with scapy
