@@ -7,7 +7,7 @@ from scapy.all import *
 PORTS = [ 8888 ]                # list of ports
 OLDDEST = "10.0.2.255"          # the original broadcast address
 NEWDEST = [ "127.0.0.10" ]      # list of new destinations of the packet
-SHOWPACKS = True                # does showpacket acutally show the packets?
+SHOWPACKS = True                # does showpacket() actually show the packets?
 IFACE = "em0"                   # interface to bind to
 GWETHER = "00:0d:b9:32:31:dc"   # MAC address of your default gateway
 MYETHER = "bc:5f:f4:1a:74:cb"   # my sending NIC (facing gateway)
@@ -18,12 +18,11 @@ def showpacket(pkt, message=None):
     pkt:        scapy network packet
     message:    additional header for the packet
     """
-    if SHOWPACKS:
-        if message:
-            print 15 * "-",
-            print message,
-            print 15 * "-"
-        pkt.show()
+    if message:
+        print 15 * "-",
+        print message,
+        print 15 * "-"
+    pkt.show()
 
 
 def exchange_destination(pkt, newdest):
@@ -41,7 +40,7 @@ def resend_packet(pkt):
     """send/relay the modified packet to its new destination
     pkt:        scapy network packet
     """
-    send(pkt, timeout=1)
+    send(pkt)
 
 
 def udp_forward(pkt):
@@ -49,10 +48,12 @@ def udp_forward(pkt):
     pkt:        scapy network packet
     """
     if pkt[UDP].dport in PORTS:
-        showpacket(pkt, "original")
+        if SHOWPACKS:
+            showpacket(pkt, "original")
         for newdest in NEWDEST:
             exchange_destination(pkt, newdest)
-            showpacket(pkt, "modified")
+            if SHOWPACKS:
+                showpacket(pkt, "modified")
             resend_packet(pkt)
 
 
