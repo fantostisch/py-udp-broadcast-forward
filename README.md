@@ -11,12 +11,32 @@ So this script sniffs the traffic on the server and reacts on specific ports to 
 
 All other fields remain unaltered.
 
+#Installation
+
+##Pre-requisites
+As this script relies on scapy to perform the packet modifications we have to install it first:
+FreeBSD:
+
+    pkg install scapy
+
+Ubuntu:
+
+    sudo apt-get install python-scapy
+    
+##Get the script
+
+    git clone https://github.com/gqgunhed/py-udp-broadcast-forward
+    cd py-udp-broadcast-forward
+
+modify settings.py to reflect your actual environment
+    
+    cp settings.py.sample settings.py
+    vi settings.py
+
+
 ##Run it
 As scapy needs access rights to your network interfaces you need to be root to run the script:
     
-    cp settings.py.sample settings.py
-    # modify settings.py to reflect your actual environment
-    vi settings.py
     # run the sniffer
     sudo python udp_forwarder.py
 
@@ -31,11 +51,3 @@ If 10.0.2.255 is the intended broadcast IP address and 8888 is the corresponding
     ..
     >>>
 
-##Pre-requisites
-FreeBSD:
-
-    pkg install scapy
-
-Ubuntu:
-
-    sudo apt-get install python-scapy
