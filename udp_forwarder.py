@@ -2,15 +2,8 @@
 
 
 from scapy.all import *
-
-
-PORTS = [ 8888 ]                # list of ports
-OLDDEST = "10.0.2.255"          # the original broadcast address
-NEWDEST = [ "127.0.0.10" ]      # list of new destinations of the packet
-SHOWPACKS = True                # does showpacket() actually show the packets?
-IFACE = "em0"                   # interface to bind to
-GWETHER = "00:0d:b9:32:31:dc"   # MAC address of your default gateway
-MYETHER = "bc:5f:f4:1a:74:cb"   # my sending NIC (facing gateway)
+# import my settings
+import settings as s
 
 
 def showpacket(pkt, message=None):
@@ -32,24 +25,25 @@ def exchange_destination(pkt, newdest):
     newdest:    string of single new IP address
     """
     pkt[IP].dst = newdest
-    pkt[Ether].src = MYETHER
-    pkt[Ether].dst = GWETHER
+    pkt[Ether].src = s.myether
+    pkt[Ether].dst = s.gwether
 
 
 def udp_forward(pkt):
     """if packet matches, modify it and re-send to new location
     pkt:        scapy network packet
     """
-    if pkt[UDP].dport in PORTS:
-        if SHOWPACKS:
+    if pkt[UDP].dport in s.ports:
+        if s.showpacks:
             showpacket(pkt, "original")
-        for newdest in NEWDEST:
+        for newdest in s.newdest:
             exchange_destination(pkt, newdest)
-            if SHOWPACKS:
+            if s.showpacks:
                 showpacket(pkt, "modified")
             send(pkt)
 
 
 # main loop here
-sniff(iface=IFACE, prn=udp_forward, filter="udp and host "+OLDDEST, store=0)
-
+if __name__ == '__main__':
+    print ">>> Sniffing on %s" % s.iface
+    sniff(iface=s.iface, prn=udp_forward, filter="udp and host "+s.olddest, store=0)
