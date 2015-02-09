@@ -36,13 +36,6 @@ def exchange_destination(pkt, newdest):
     pkt[Ether].dst = GWETHER
 
 
-def resend_packet(pkt):
-    """send/relay the modified packet to its new destination
-    pkt:        scapy network packet
-    """
-    send(pkt)
-
-
 def udp_forward(pkt):
     """if packet matches, modify it and re-send to new location
     pkt:        scapy network packet
@@ -54,7 +47,7 @@ def udp_forward(pkt):
             exchange_destination(pkt, newdest)
             if SHOWPACKS:
                 showpacket(pkt, "modified")
-            resend_packet(pkt)
+            send(pkt)
 
 
 # main loop here
