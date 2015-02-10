@@ -25,8 +25,17 @@ def exchange_destination(pkt, newdest):
     newdest:    string of single new IP address
     """
     pkt[IP].dst = newdest
-    pkt[Ether].src = s.myether
-    pkt[Ether].dst = s.gwether
+
+def send_packet(pkt):
+    """send modified packet"""
+    pkt = Ether()/IP(dst=pkt[IP].dst)/UDP(sport=pkt[UDP].sport,dport=pkt[UDP].dport)/Raw(load=pkt[Raw].load)
+    # show the packet?
+    if s.showpacks:
+        showpacket(pkt, "modified")
+    # send() uses layer3
+    send(pkt[IP])
+    # sendp() sends layer2
+    #sendp(pkt)
 
 
 def udp_forward(pkt):
@@ -38,9 +47,7 @@ def udp_forward(pkt):
             showpacket(pkt, "original")
         for newdest in s.newdest:
             exchange_destination(pkt, newdest)
-            if s.showpacks:
-                showpacket(pkt, "modified")
-            send(pkt)
+            send_packet(pkt)
 
 
 # main loop here
