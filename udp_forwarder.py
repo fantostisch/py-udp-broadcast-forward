@@ -18,24 +18,29 @@ def showpacket(pkt, message=None):
     pkt.show()
 
 
-def exchange_destination(pkt, newdest):
-    """exchange the destination of the packet
-    leave all other fields untouched
-    pkt:        scapy network packet
-    newdest:    string of single new IP address
-    """
-    pkt[IP].dst = newdest
-
 def send_packet(pkt):
-    """send modified packet"""
-    pkt = Ether()/IP(dst=pkt[IP].dst)/UDP(sport=pkt[UDP].sport,dport=pkt[UDP].dport)/Raw(load=pkt[Raw].load)
+    """send the packet
+    pkt:        scapy network packet
+    """
     # show the packet?
     if s.showpacks:
         showpacket(pkt, "modified")
-    # send() uses layer3
+    # send() uses layer3, so use only the IP-part of pkt
     send(pkt[IP])
     # sendp() sends layer2
     #sendp(pkt)
+
+
+def craft_packet(pkt):
+    """craft a new/modified packet and only transfer some information
+    pkt:        scapy network packet
+    returns:    newpkt: newly created scapy network packet
+    """
+    newpkt = Ether()/\
+             IP(src=pkt[IP].src, dst=pkt[IP].dst)/\
+             UDP(sport=pkt[UDP].sport, dport=pkt[UDP].dport)/\
+             Raw(load=pkt[Raw].load)
+    return newpkt
 
 
 def udp_forward(pkt):
@@ -45,8 +50,11 @@ def udp_forward(pkt):
     if pkt[UDP].dport in s.ports:
         if s.showpacks:
             showpacket(pkt, "original")
+        # replace packet with crafted version    
+        pkt = craft_packet(pkt)
         for newdest in s.newdest:
-            exchange_destination(pkt, newdest)
+            # fill in the new destination IP
+            pkt[IP].dst = newdest
             send_packet(pkt)
 
 
