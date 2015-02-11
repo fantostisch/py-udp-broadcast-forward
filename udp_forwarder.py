@@ -1,7 +1,16 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+"""script to forward received UDP broadcast
+packets to a given list of new receivers
+
+Packets will be crafted and the previous content
+will be packed into the new packet.
+"""
 
 
-from scapy.all import *
+#from scapy.all import sniff, send, IP, UDP, Ether, Raw
+from scapy.all import sniff, send, IP, UDP, Ether, Raw
 # import my settings
 import settings as s
 
@@ -50,7 +59,7 @@ def udp_forward(pkt):
     if pkt[UDP].dport in s.ports:
         if s.showpacks:
             showpacket(pkt, "original")
-        # replace packet with crafted version    
+        # replace packet with crafted version
         pkt = craft_packet(pkt)
         for newdest in s.newdest:
             # fill in the new destination IP
