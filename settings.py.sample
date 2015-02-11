@@ -17,7 +17,3 @@ showpacks = True
 
 # listen on which network interface?
 iface = "em0"
-
-# ethernet address of my sending NIC and the NIC of my next gateway
-gwether = "00:0d:b9:32:31:dc"   # MAC address of your default gateway
-myether = "bc:5f:f4:1a:74:cb"   # my sending NIC (facing gateway)
