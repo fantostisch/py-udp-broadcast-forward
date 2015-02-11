@@ -45,9 +45,8 @@ As scapy needs access rights to your network interfaces you need to be root to r
 If 10.0.2.255 is the intended broadcast IP address and 8888 is the corresponding UDP port then use for example scapy to send a crafted packet to see if it triggers the forwarder script:
 
     root@fbsd:~ # scapy
-    >>> send(IP(dst="10.0.2.255")/UDP(dport=8888))
-    Begin emission:
-    Finished to send 1 packets.
-    ..
+    >>> send(IP(dst="10.0.2.255")/UDP(sport=8888, dport=8888)/Raw(load="test"))
+    .
+    Sent 1 packet.
     >>>
 
