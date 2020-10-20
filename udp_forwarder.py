@@ -45,7 +45,7 @@ def craft_packet(pkt):
     returns:    newpkt: newly created scapy network packet
     """
     newpkt = Ether()/\
-             IP(src=pkt[IP].src, dst=pkt[IP].dst)/\
+             IP(dst=pkt[IP].dst)/\
              UDP(sport=pkt[UDP].sport, dport=pkt[UDP].dport)/\
              Raw(load=pkt[Raw].load)
     return newpkt

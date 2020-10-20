@@ -7,9 +7,7 @@ Use cases could be to forward LAN-broadcasts from old games through a VPN-tunnel
 
 Even if there is a TCP/IP connection between both LANs, the game's broadcasts to discover "LAN games" will not reach the other subnet. 
 
-So this script sniffs the traffic on the server and reacts on specific ports to re-write the destination IP-address to the given host and re-sends it.
-
-All other fields remain unaltered.
+This script sniffs the traffic on the device running the game server and resents broadcast messages on specific ports to specific IP Addresses.
 
 # Installation
 
