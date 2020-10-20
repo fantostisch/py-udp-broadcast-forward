@@ -9,8 +9,9 @@ will be packed into the new packet.
 """
 
 
-#from scapy.all import sniff, send, IP, UDP, Ether, Raw
-from scapy.all import sniff, send, IP, UDP, Ether, Raw
+from scapy.all import sniff, send, sendp, Raw
+from scapy.layers.inet import IP, UDP, Ether
+
 # import my settings
 import settings as s
 
