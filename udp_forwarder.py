@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 """script to forward received UDP broadcast
@@ -21,9 +21,7 @@ def showpacket(pkt, message=None):
     message:    additional header for the packet
     """
     if message:
-        print 15 * "-",
-        print message,
-        print 15 * "-"
+        print(15 * "-" + message + 15 * "-")
     pkt.show()
 
 
@@ -69,5 +67,5 @@ def udp_forward(pkt):
 
 # main loop here
 if __name__ == '__main__':
-    print ">>> Sniffing on %s" % s.iface
+    print(">>> Sniffing on %s" % s.iface)
     sniff(iface=s.iface, prn=udp_forward, filter="udp and host "+s.olddest, store=0)

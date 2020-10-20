@@ -21,7 +21,7 @@ FreeBSD:
 
 Ubuntu:
 
-    sudo apt-get install python-scapy
+    sudo apt-get install python3-scapy
     
 ## Get the script
 
@@ -38,7 +38,7 @@ modify settings.py to reflect your actual environment
 As scapy needs access rights to your network interfaces you need to be root to run the script:
     
     # run the sniffer
-    sudo python udp_forwarder.py
+    sudo python3 udp_forwarder.py
 
 ## Test with scapy
 
