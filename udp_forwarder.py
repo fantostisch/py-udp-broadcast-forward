@@ -9,8 +9,9 @@ will be packed into the new packet.
 """
 
 
-from scapy.all import sniff, send, sendp, Raw
+from scapy.all import *
 from scapy.layers.inet import IP, UDP, Ether
+import ipaddress
 
 # import my settings
 import settings as s
@@ -21,22 +22,11 @@ def showpacket(pkt, message=None):
     pkt:        scapy network packet
     message:    additional header for the packet
     """
-    if message:
-        print(15 * "-" + message + 15 * "-")
-    pkt.show()
-
-
-def send_packet(pkt):
-    """send the packet
-    pkt:        scapy network packet
-    """
     # show the packet?
     if s.showpacks:
-        showpacket(pkt, "modified")
-    # send() uses layer3, so use only the IP-part of pkt
-    send(pkt[IP])
-    # sendp() sends layer2
-    #sendp(pkt)
+        if message:
+            print(15 * "-" + message + 15 * "-")
+        pkt.show()
 
 
 def craft_packet(pkt):
@@ -56,14 +46,31 @@ def udp_forward(pkt):
     pkt:        scapy network packet
     """
     if pkt[UDP].dport in s.ports:
-        if s.showpacks:
-            showpacket(pkt, "original")
+        before = datetime.now()
+        showpacket(pkt, "original")
         # replace packet with crafted version
         pkt = craft_packet(pkt)
-        for newdest in s.newdest:
-            # fill in the new destination IP
-            pkt[IP].dst = newdest
-            send_packet(pkt)
+        packet_list = []
+        for new_dest_range in s.newdestranges:
+            for ip in ipaddress.ip_network(new_dest_range):
+                new_pkt = pkt.copy()
+                # fill in the new destination IP
+                new_pkt[IP].dst = str(ip)
+                showpacket(new_pkt, "modified")
+                packet_list.append(new_pkt)
+
+        packet_list_l3 = []
+        for p in packet_list:
+            packet_list_l3.append(p[IP])
+
+        after = datetime.now()
+        diff = after - before
+        print("Creating packets took: " + str(diff.total_seconds()) + " seconds.")
+
+        # send() uses layer3, so use only the IP-part of pkt
+        send(packet_list_l3)
+        # sendp() sends layer2
+        # sendp(packet_list)
 
 
 # main loop here
